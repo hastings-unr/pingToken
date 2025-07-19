@@ -7,6 +7,13 @@ In production, the clients will be indentified by different usernames on separat
 
 The app runs automatically at startup of the codespace, which has a default active-time of 30 min.
 
+Instructions:
+1. Start the app on two browsers/machines; one of them will enable the [Ping] button initially
+2. Press [Ping] in the browser where it is enabled; the button will then be disabled awaiting a response from other party
+3. Press [Poll] in the other browser to check if a ping was sent; when it is [Ping] there will be re-enabled
+4. Similarly, press [Poll] in the first browser to check if its ping was replied; then its [Ping] will be re-enabled
+5. After 5 attempts to pickup a ping from the opposite party, polling is paused; press [Poll] to re-initiate a new poll
+
 ```
 npm start
 ```
