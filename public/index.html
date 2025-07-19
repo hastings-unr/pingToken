@@ -4,15 +4,17 @@
         <title>Home</title>
         <script>
 
-            const myName = "hastings"
-            var myToken  // undefined, initially
-
+          const myName = "hastings"
+          var myToken  // undefined, initially
+          const pollMax = 5  // number of polls to make, before pausing
+          var pollId, pollNum  // current polling params   
+            
           async function init() {
           // Startup  
             myToken = setToken(myName)
             var token = await getToken()  // retrieve existing token, if any
             ping.disabled = checkToken(token)  // if it's mine, wait for other party
-            await putToken(myToken)  // assert my new token, regardless
+            await putToken()  // regardless, assert myToken; no poll
           }
 
           function checkToken(token) { 
@@ -35,14 +37,7 @@
             o.agent = guessBrowser()
             return o
           }
-
-          async function putToken(token) { //console.log("at putToken")
-          // Store my context to server
-            const response = await fetch('token.json', 
-             { method: "PUT", body: JSON.stringify(token),
-               headers: {"Content-Type": "application/json"}}); console.log("put", token)
-          }
-          
+  
           async function getToken() { //console.log("at getToken")
           // Fetch most recent context from server 
           // https://stackoverflow.com/questions/62680847/how-to-wait-for-fetch-to-complete
@@ -56,20 +51,37 @@
             } 
           }
 
-        </script>
-    </head>
-    <body onLoad="init()">
-        <big><button id=ping onClick="putToken(myToken)">Ping</button></big>
-        <script>
-          async function poll() {
-            var token =await getToken(); 
+          async function putToken(flag) { //console.log("at putToken")
+          // Store my context to server
+            const response = await fetch('token.json', 
+             { method: "PUT", body: JSON.stringify(token),
+               headers: {"Content-Type": "application/json"}}); 
+              console.log("put", myToken)  // NB: always *my* token
+              if (flag) setTimeout(rePoll, 1000)  // optionally, force first poll
+          }
+          function rePoll() {
+          // Start a new polling sequence   
+              pollSeq.innerHTML = " "; poll.hidden = true
+              pollNum = pollMax 
+              pollId = setInterval(poller, 2000)  // start the poller
+          }
+          async function poller() { //console.log("at poller)
+          // Continue polling
+            pollSeq.innerHTML += (pollNum +" ")  // count down   
+            var token = await getToken(); 
             ping.disabled = checkToken(token); 
-            if(--mx<=0 || !ping.disabled) {
-              clearInterval(id); console.log("cleared")
+            if(--pollNum<=0 || !ping.disabled) {
+              clearInterval(pollId); //console.log("cleared")
+              poll.hidden = !ping.disabled  
             }
           }
-          var mx = 5  // number of polls to make, before pausing
-          var id = setInterval(poll, 2000) 
         </script>
+    </head>
+
+    <body onLoad="init()">
+        <big><button id=ping onClick="putToken(true)" value="Ping"></big>
+        <span id=pollSeq> </span>
+        <button id=poll onClick="rePoll()" hidden=true value="Poll">
     </body>
+
 </html>
