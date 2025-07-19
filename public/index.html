@@ -4,13 +4,13 @@
         <title>Home</title>
         <script>
 
-          const myName = "hastings"
+          const myName = "USERNAME"  //<-- *CHANGE THIS*
           var myToken  // undefined, initially
           const pollMax = 5  // number of polls to make, before pausing
           var pollId, pollNum  // current polling params   
             
           async function init() {
-          // Startup  
+          // Startup 
             myToken = setToken(myName)
             var token = await getToken()  // retrieve existing token, if any
             ping.disabled = checkToken(token)  // if it's mine, wait for other party
