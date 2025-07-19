@@ -1,0 +1,74 @@
+<!doctype HTML>
+<html>
+    <head>
+        <title>Home</title>
+        <script>
+
+          var myToken  // undefined, initially
+
+          async function init() {
+          // Startup  
+            myToken = setToken("hastings")
+            var token = await getToken()  // retrieve existing token, if any
+            ping.disabled = checkToken(token)  // if it's mine, wait for other party
+            await putToken(myToken)  // assert my new token, regardless
+          }
+
+          function checkToken(token) { 
+          // Check whether token is mine
+            return (token.user==myToken.user && token.agent==myToken.agent) 
+          }
+
+          function setToken(myName) {
+          // Establish initial User-Browser context - myself in this browser  
+            const o = {}
+            function guessBrowser() {
+              const a = navigator.userAgent; console.log(a)
+              var r = "Firefox"  // default, ff order important
+              if (a.indexOf("Saf")>0) r = "Safari"
+              if (a.indexOf("Chr")>0) r = "Chrome"
+              if (a.indexOf("Edg")>0) r = "Edge"
+              return r
+            }
+            o.user = myName
+            o.agent = guessBrowser()
+            return o
+          }
+
+          async function putToken(token) { //console.log("at putToken")
+          // Store my context to server
+            const response = await fetch('token.json', 
+             { method: "PUT", body: JSON.stringify(token),
+               headers: {"Content-Type": "application/json"}}); console.log("put", token)
+          }
+          
+          async function getToken() { //console.log("at getToken")
+          // Fetch most recent context from server 
+          // https://stackoverflow.com/questions/62680847/how-to-wait-for-fetch-to-complete
+            try {
+             const response = await fetch('token.json')
+             if (!response.ok) throw new Error(`Response status: ${response.status}`)
+             const token = await response.json(); console.log("got", token)
+             return token
+            } catch (error) {
+             console.error(error.message)
+            } 
+          }
+
+        </script>
+    </head>
+    <body onLoad="init()">
+        <big><button id=ping onClick="putToken(myToken)">Ping</button></big>
+        <script>
+          async function poll() {
+            var token =await getToken(); 
+            ping.disabled = checkToken(token); 
+            if(--mx<=0 || !ping.disabled) {
+              clearInterval(id); console.log("cleared")
+            }
+          }
+          var mx = 5  // number of polls to make, before pausing
+          var id = setInterval(poll, 2000) 
+        </script>
+    </body>
+</html>
