@@ -4,11 +4,12 @@
         <title>Home</title>
         <script>
 
-          var myToken  // undefined, initially
+            const myName = "hastings"
+            var myToken  // undefined, initially
 
           async function init() {
           // Startup  
-            myToken = setToken("hastingx")
+            myToken = setToken(myName)
             var token = await getToken()  // retrieve existing token, if any
             ping.disabled = checkToken(token)  // if it's mine, wait for other party
             await putToken(myToken)  // assert my new token, regardless
@@ -19,7 +20,7 @@
             return (token.user==myToken.user && token.agent==myToken.agent) 
           }
 
-          function setToken(myName) {
+          function setToken(name) {
           // Establish initial User-Browser context - myself in this browser  
             const o = {}
             function guessBrowser() {
@@ -30,7 +31,7 @@
               if (a.indexOf("Edg")>0) r = "Edge"
               return r
             }
-            o.user = myName
+            o.user = name
             o.agent = guessBrowser()
             return o
           }
