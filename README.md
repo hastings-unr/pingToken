@@ -1,12 +1,11 @@
-# GitHub Codespaces ♥️ Express
+# pingToken ♥️ Express
 
-Welcome to your shiny new Codespace running Express! We've got everything fired up and running for you to explore Express.
+The CSx91 Exercise4-Pilot codespace built on the GH Express template.
 
-You've got a blank canvas to work on from a git perspective as well. There's a single initial commit with the what you're seeing right now - where you go from here is up to you!
+This app demonstrates simple ping-ing between two browser clients over the Web, with state between them maintained on a Node/Express server.
+In production, the clients will be indentified by different usernames on separate machines (desktops, tablets, phones). For ease of testing, the clients also may be different browsers (Chrome, Edge, Firefox, Safari) for the same username on a single machine.
 
-Everything you do here is contained within this one codespace. There is no repository on GitHub yet. If and when you’re ready you can click "Publish Branch" and we’ll create your repository and push up your project. If you were just exploring then and have no further need for this code then you can simply delete your codespace and it's gone forever.
-
-To run this application:
+The app runs automatically at startup of the codespace, which has a default active-time of 30 min.
 
 ```
 npm start
