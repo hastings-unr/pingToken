@@ -54,7 +54,7 @@
           async function putToken(flag) { //console.log("at putToken")
           // Store my context to server
             const response = await fetch('token.json', 
-             { method: "PUT", body: JSON.stringify(token),
+             { method: "PUT", body: JSON.stringify(myToken),
                headers: {"Content-Type": "application/json"}}); 
               console.log("put", myToken)  // NB: always *my* token
               if (flag) setTimeout(rePoll, 1000)  // optionally, force first poll
@@ -79,9 +79,9 @@
     </head>
 
     <body onLoad="init()">
-        <big><button id=ping onClick="putToken(true)" value="Ping"></big>
+        <big><input type=button id=ping onClick="putToken(true)" value="Ping"></big>
         <span id=pollSeq> </span>
-        <button id=poll onClick="rePoll()" hidden=true value="Poll">
+        <input type=button id=poll onClick="rePoll()" hidden=true value="Poll">
     </body>
 
 </html>
