@@ -78,7 +78,7 @@
         </script>
     </head>
 
-    <body>
+    <body onLoad="init()">
         <big><input type=button id=ping onClick="putToken(true)" value="Ping"></big>
         <span id=pollSeq> </span>
         <input type=button id=poll onClick="rePoll()" hidden=true value="Poll">
